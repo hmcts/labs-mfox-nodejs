@@ -1,0 +1,38 @@
+name: Backstage Test
+
+on:
+  workflow_dispatch:
+    inputs:
+      dns_zone:
+        type: string
+      record_name:
+        type: string
+      record_value:
+        type: string
+      record_ttl:
+        type: number
+      environments:
+        type: string
+      cft_sds:
+        type: number
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    # outputs:
+    #   matrix-environments: ${{ steps.set-matrix-environments.outputs.matrix-environments }}
+    steps:
+    - uses: actions/checkout@v3
+    # - id: set-matrix-environments
+    #   run: |
+    #     environments="${{ github.event.inputs.environments }}"
+    #     echo "matrix-environments=[\"${environments//', '/\",\"}\"]" >> $GITHUB_OUTPUT
+    - name: Print Inputs
+      run: |
+        "echo DNS Zone Name: ${{ github.event.inputs.dns_zone }}"
+        "echo DNS Record Name: ${{ github.event.inputs.record_name }}"
+        "echo DNS Record Value: ${{ github.event.inputs.dns_zone }}"
+        "echo DNS Record TTL: ${{ github.event.inputs.dns_zone }}"
+        "echo Environment: ${{ github.event.inputs.environments }}"
+        "echo Platform: ${{ github.event.inputs.cft_sds }}"
+
