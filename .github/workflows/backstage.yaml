@@ -36,10 +36,10 @@ jobs:
     #     echo "matrix-environments=[\"${environments//', '/\",\"}\"]" >> $GITHUB_OUTPUT
     - name: Print Inputs
       run: |
-        "echo DNS Zone Name: ${{ github.event.inputs.dns_zone }}"
-        "echo DNS Record Name: ${{ github.event.inputs.record_name }}"
-        "echo DNS Record Value: ${{ github.event.inputs.dns_zone }}"
-        "echo DNS Record TTL: ${{ github.event.inputs.dns_zone }}"
-        "echo Environment: ${{ github.event.inputs.environments }}"
-        "echo Platform: ${{ github.event.inputs.cft_sds }}"
+        echo "DNS Zone Name: ${{ github.event.inputs.dns_zone }}"
+        echo "DNS Record Name: ${{ github.event.inputs.record_name }}"
+        echo "DNS Record Value: ${{ github.event.inputs.dns_zone }}"
+        echo "DNS Record TTL: ${{ github.event.inputs.dns_zone }}"
+        echo "Environment: ${{ github.event.inputs.environments }}"
+        echo "Platform: ${{ github.event.inputs.cft_sds }}"
 
