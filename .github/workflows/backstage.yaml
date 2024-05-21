@@ -5,16 +5,22 @@ on:
     inputs:
       dns_zone:
         type: string
+        description: ""
       record_name:
         type: string
+        description: ""
       record_value:
         type: string
+        description: ""
       record_ttl:
-        type: number
+        type: string
+        description: ""
       environments:
         type: string
+        description: ""
       cft_sds:
-        type: number
+        type: string
+        description: ""
 
 jobs:
   build:
