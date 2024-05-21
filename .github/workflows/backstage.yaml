@@ -18,6 +18,7 @@ on:
       environments:
         type: string
         description: ""
+        default: "missing"
       cft_sds:
         type: string
         description: ""
