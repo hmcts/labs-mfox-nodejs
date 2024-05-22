@@ -34,6 +34,12 @@ jobs:
     #   run: |
     #     environments="${{ github.event.inputs.environments }}"
     #     echo "matrix-environments=[\"${environments//', '/\",\"}\"]" >> $GITHUB_OUTPUT
+    
+    - name: Set Branch Name
+      run: echo "BACKSTAGE_BRANCH_NAME=${{ github.event.inputs.dns_zone }}_${{ github.event.inputs.record_name }}_${{ github.event.inputs.record_value }}_${{ github.event.inputs.cft_sds }}" >> $GITHUB_ENV
+    
+    - name: Print Branch Name
+      run: echo $BACKSTAGE_BRANCH_NAME
 
     - name: git create branch
       run: |
@@ -41,7 +47,7 @@ jobs:
         git --version
         git config user.name "GitHub Actions Bot"
         git config user.email "<>"
-        git checkout -b ${{ github.event.inputs.dns_zone }}_${{ github.event.inputs.record_name }}
+        git checkout -b $BACKSTAGE_BRANCH_NAME
 
     - name: Print Inputs
       run: |
@@ -69,9 +75,9 @@ jobs:
       run: |
         git add example.yaml
         git commit -m "Adding new example yaml file with inputs for content"
-        git push -u origin ${{ github.event.inputs.dns_zone }}_${{ github.event.inputs.record_name }}_${{ github.event.inputs.record_value }}_${{ github.event.inputs.cft_sds }}"
+        git push -u origin $BACKSTAGE_BRANCH_NAME
 
     - name: create pull request
-      run: gh pr create -B master -H ${{ github.event.inputs.dns_zone }}_${{ github.event.inputs.record_name }} --title 'Create new ${{ github.event.inputs.record_name }} record in ${{ github.event.inputs.dns_zone }}' --body 'Created by Backstage'
+      run: gh pr create -B master -H $BACKSTAGE_BRANCH_NAME --title 'Create new ${{ github.event.inputs.record_name }} record in ${{ github.event.inputs.dns_zone }}' --body 'Created by Backstage'
       env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
