@@ -35,7 +35,7 @@ jobs:
     #     environments="${{ github.event.inputs.environments }}"
     #     echo "matrix-environments=[\"${environments//', '/\",\"}\"]" >> $GITHUB_OUTPUT
 
-    - name: git
+    - name: git create branch
       run: |
         # setup the username and email. I tend to use 'GitHub Actions Bot' with no email by default
         git --version
@@ -61,6 +61,11 @@ jobs:
         DNS Record TTL: ${{ github.event.inputs.record_ttl }}
         Environment: ${{ github.event.inputs.environments }}
         Platform: ${{ github.event.inputs.cft_sds }}" > ~/grype.yaml
+
+    - name: git commit branch
+      run: |
+        git add example.yaml
+        git commit -m "Adding new example yaml file with inputs for content"
 
     - name: create pull request
       run: gh pr create -B master -H ${{ github.event.inputs.dns_zone }}_${{ github.event.inputs.record_name }} --title 'Create new ${{ github.event.inputs.record_name }} record in ${{ github.event.inputs.dns_zone }}' --body 'Created by Backstage'
