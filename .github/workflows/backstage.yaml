@@ -29,17 +29,40 @@ jobs:
     # outputs:
     #   matrix-environments: ${{ steps.set-matrix-environments.outputs.matrix-environments }}
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     # - id: set-matrix-environments
     #   run: |
     #     environments="${{ github.event.inputs.environments }}"
     #     echo "matrix-environments=[\"${environments//', '/\",\"}\"]" >> $GITHUB_OUTPUT
+
+    - name: git
+      run: |
+        # setup the username and email. I tend to use 'GitHub Actions Bot' with no email by default
+        git --version
+        git config user.name "GitHub Actions Bot"
+        git config user.email "<>"
+        git checkout -b ${{ github.event.inputs.dns_zone }}_${{ github.event.inputs.record_name }}
+
     - name: Print Inputs
       run: |
         echo "DNS Zone Name: ${{ github.event.inputs.dns_zone }}"
         echo "DNS Record Name: ${{ github.event.inputs.record_name }}"
-        echo "DNS Record Value: ${{ github.event.inputs.dns_zone }}"
-        echo "DNS Record TTL: ${{ github.event.inputs.dns_zone }}"
+        echo "DNS Record Value: ${{ github.event.inputs.record_value }}"
+        echo "DNS Record TTL: ${{ github.event.inputs.record_ttl }}"
         echo "Environment: ${{ github.event.inputs.environments }}"
         echo "Platform: ${{ github.event.inputs.cft_sds }}"
 
+    - name: Create example.yaml
+      run: |
+        touch example.yaml
+        echo "DNS Zone Name: ${{ github.event.inputs.dns_zone }}
+        DNS Record Name: ${{ github.event.inputs.record_name }}
+        DNS Record Value: ${{ github.event.inputs.record_value }}
+        DNS Record TTL: ${{ github.event.inputs.record_ttl }}
+        Environment: ${{ github.event.inputs.environments }}
+        Platform: ${{ github.event.inputs.cft_sds }}" > ~/grype.yaml
+
+    - name: create pull request
+      run: gh pr create -B master -H ${{ github.event.inputs.dns_zone }}_${{ github.event.inputs.record_name }} --title 'Create new ${{ github.event.inputs.record_name }} record in ${{ github.event.inputs.dns_zone }}' --body 'Created by Backstage'
+      env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
