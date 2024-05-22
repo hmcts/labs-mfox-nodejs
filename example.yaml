@@ -1,0 +1,6 @@
+DNS Zone Name: hmcts.net
+DNS Record Name: test
+DNS Record Value: value
+DNS Record TTL: 123
+Environment: missing
+Platform: cft
