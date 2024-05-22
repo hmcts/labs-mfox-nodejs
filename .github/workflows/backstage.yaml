@@ -60,7 +60,7 @@ jobs:
         DNS Record Value: ${{ github.event.inputs.record_value }}
         DNS Record TTL: ${{ github.event.inputs.record_ttl }}
         Environment: ${{ github.event.inputs.environments }}
-        Platform: ${{ github.event.inputs.cft_sds }}" > ~/grype.yaml
+        Platform: ${{ github.event.inputs.cft_sds }}" > example.yaml
 
     - name: git commit branch
       run: |
