@@ -66,6 +66,7 @@ jobs:
       run: |
         git add example.yaml
         git commit -m "Adding new example yaml file with inputs for content"
+        git push -u origin ${{ github.event.inputs.dns_zone }}_${{ github.event.inputs.record_name }}
 
     - name: create pull request
       run: gh pr create -B master -H ${{ github.event.inputs.dns_zone }}_${{ github.event.inputs.record_name }} --title 'Create new ${{ github.event.inputs.record_name }} record in ${{ github.event.inputs.dns_zone }}' --body 'Created by Backstage'
