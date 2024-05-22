@@ -67,7 +67,7 @@
     "@types/chai-as-promised": "7.1.5",
     "@types/jest": "29.0.3",
     "@types/mini-css-extract-plugin": "2.5.1",
-    "@types/supertest": "2.0.12",
+    "@types/supertest": "2.0.16",
     "@typescript-eslint/eslint-plugin": "5.37.0",
     "@typescript-eslint/parser": "5.37.0",
     "axios-debug-log": "0.8.4",
