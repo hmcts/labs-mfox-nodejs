@@ -1,0 +1,6 @@
+DNS Zone Name: platforms.hmcts.net
+DNS Record Name: testRecord
+DNS Record Value: asdfasdf
+DNS Record TTL: 1231
+Environment: missing
+Platform: sds
