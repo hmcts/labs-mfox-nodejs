@@ -71,17 +71,17 @@ jobs:
     - name: read from file
       uses: mikefarah/yq@v4.44.1
       with:
-            cmd: yq '.dnsRecordName' file.yaml
+            cmd: yq '.dnsRecordName' example.yaml
 
     - name: read from file
       uses: mikefarah/yq@v4.44.1
       with:
-            cmd: yq '.dnsRecordName = "YQ updated me"' file.yaml
+            cmd: yq '.dnsRecordName = "YQ updated me"' example.yaml
 
     - name: read from file
       uses: mikefarah/yq@v4.44.1
       with:
-            cmd: yq '.dnsRecordName' file.yaml
+            cmd: yq '.dnsRecordName' example.yaml
 
     - name: Workspace
       run: ls ${{ github.workspace }}
