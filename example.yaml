@@ -1,0 +1,6 @@
+dnsZoneName: hmcts.net
+dnsRecordName: test2
+dnsRecordValue: asdasd
+dnsRecordTTL: 123
+environment: missing
+platform: cft
