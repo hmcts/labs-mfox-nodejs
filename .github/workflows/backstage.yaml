@@ -76,7 +76,7 @@ jobs:
             record:  \"hmcts-sbox-gufqadefbjgbhkhv.z01.azurefd.net\" " > example.yaml
 
     - name: Add new A Record
-      if: inputs.record_type == "A"
+      if: ${{ inputs.record_type == A }}
       uses: "./.github/actions/aRecord.yaml"
       with:
         zone_name: ${{ inputs.dns_zone }}
@@ -86,7 +86,7 @@ jobs:
         environment: ${{ inputs.environments }}
         
     - name: Add new CNAME Record
-      if: inputs.record_type == "CNAME"
+      if: ${{ inputs.record_type == CNAME }}
       uses: "./.github/actions/cnameRecord.yaml"
       with:
         zone_name: ${{ inputs.dns_zone }}
