@@ -69,9 +69,13 @@ jobs:
 
               
     - name: read from file
+      id: readOriginalFile
       uses: mikefarah/yq@v4.44.1
       with:
-          cmd: yq '.dnsRecordName' 'example.yaml'
+          cmd: yq -i '.dnsRecordName' 'example.yaml'
+
+    - name: show yq result
+      run: echo Result is ${{ steps.readOriginalFile.outputs.result }}
 
     - name: update file
       uses: mikefarah/yq@v4.44.1
@@ -79,9 +83,13 @@ jobs:
           cmd: yq '.dnsRecordName = "YQ updated me"' 'example.yaml'
 
     - name: read from updated file
+      id: readUpdatedFile
       uses: mikefarah/yq@v4.44.1
       with:
-          cmd: yq '.dnsRecordName' 'example.yaml'
+          cmd: yq -i '.dnsRecordName' 'example.yaml'
+
+    - name: show yq result
+      run: echo Result is ${{ steps.readUpdatedFile.outputs.result }}
 
     - name: Workspace
       run: ls ${{ github.workspace }}
