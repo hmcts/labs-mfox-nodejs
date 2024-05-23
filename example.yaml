@@ -1,0 +1,6 @@
+dnsZoneName: hmcts.net
+dnsRecordName: test2
+dnsRecord: asdasd
+dnsRecordTTL: 235
+environment: missing
+platform: sds
