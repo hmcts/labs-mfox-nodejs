@@ -82,7 +82,7 @@ jobs:
           cmd: yq '.A' 'example.yaml'
 
     - name: show yq result
-      run: echo Result is ${{ steps.readOriginalFile.outputs.result }}
+      run: echo Result is "${{ steps.readOriginalFile.outputs.result }}"
 
     - name: update file
       uses: mikefarah/yq@v4.44.1
@@ -96,7 +96,7 @@ jobs:
           cmd: yq '.A' 'example.yaml'
 
     - name: show yq result
-      run: echo Result is ${{ steps.readUpdatedFile.outputs.result }}
+      run: echo Result is "${{ steps.readUpdatedFile.outputs.result }}"
 
     - name: Workspace
       run: ls ${{ github.workspace }}
