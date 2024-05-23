@@ -72,7 +72,7 @@ jobs:
       id: readOriginalFile
       uses: mikefarah/yq@v4.44.1
       with:
-          cmd: yq -i '.dnsRecordName' 'example.yaml'
+          cmd: yq '.dnsRecordName' 'example.yaml'
 
     - name: show yq result
       run: echo Result is ${{ steps.readOriginalFile.outputs.result }}
@@ -86,7 +86,7 @@ jobs:
       id: readUpdatedFile
       uses: mikefarah/yq@v4.44.1
       with:
-          cmd: yq -i '.dnsRecordName' 'example.yaml'
+          cmd: yq '.dnsRecordName' 'example.yaml'
 
     - name: show yq result
       run: echo Result is ${{ steps.readUpdatedFile.outputs.result }}
