@@ -43,7 +43,6 @@ jobs:
 
     - name: git create branch
       run: |
-        # setup the username and email. I tend to use 'GitHub Actions Bot' with no email by default
         git --version
         git config user.name "GitHub Actions Bot"
         git config user.email "<>"
@@ -61,20 +60,36 @@ jobs:
     - name: Create example.yaml
       run: |
         touch example.yaml
-        echo "DNS Zone Name: ${{ github.event.inputs.dns_zone }}
-        DNS Record Name: ${{ github.event.inputs.record_name }}
-        DNS Record Value: ${{ github.event.inputs.record_value }}
-        DNS Record TTL: ${{ github.event.inputs.record_ttl }}
-        Environment: ${{ github.event.inputs.environments }}
-        Platform: ${{ github.event.inputs.cft_sds }}" > example.yaml
+        echo "dnsZoneName: ${{ github.event.inputs.dns_zone }}
+        dnsRecordName: ${{ github.event.inputs.record_name }}
+        dnsRecord: ${{ github.event.inputs.record_value }}
+        dnsRecordTTL: ${{ github.event.inputs.record_ttl }}
+        environment: ${{ github.event.inputs.environments }}
+        platform: ${{ github.event.inputs.cft_sds }}" > example.yaml
+
+              
+    - name: read from file
+      uses: mikefarah/yq@v4.44.1
+      with:
+            cmd: yq '.dnsRecordName' file.yaml
+
+    - name: read from file
+      uses: mikefarah/yq@v4.44.1
+      with:
+            cmd: yq '.dnsRecordName = "YQ updated me"' file.yaml
+
+    - name: read from file
+      uses: mikefarah/yq@v4.44.1
+      with:
+            cmd: yq '.dnsRecordName' file.yaml
 
     - name: Workspace
       run: ls ${{ github.workspace }}
 
     - name: git commit branch
       run: |
-        git add example.yaml
-        git commit -m "Adding new example yaml file with inputs for content"
+        git add .
+        git commit -m "Backstage DNS workflow - Adding updated files to commit"
         git push -u origin $BACKSTAGE_BRANCH_NAME
 
     - name: create pull request
