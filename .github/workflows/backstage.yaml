@@ -62,7 +62,7 @@ jobs:
         touch example.yaml
         echo "dnsZoneName: ${{ github.event.inputs.dns_zone }}
         dnsRecordName: ${{ github.event.inputs.record_name }}
-        dnsRecord: ${{ github.event.inputs.record_value }}
+        dnsRecordValue: ${{ github.event.inputs.record_value }}
         dnsRecordTTL: ${{ github.event.inputs.record_ttl }}
         environment: ${{ github.event.inputs.environments }}
         platform: ${{ github.event.inputs.cft_sds }}" > example.yaml
@@ -71,17 +71,17 @@ jobs:
     - name: read from file
       uses: mikefarah/yq@v4.44.1
       with:
-            cmd: yq '.dnsRecordName' example.yaml
+          cmd: yq '.dnsRecordName' 'example.yaml'
 
-    - name: read from file
+    - name: update file
       uses: mikefarah/yq@v4.44.1
       with:
-            cmd: yq '.dnsRecordName = "YQ updated me"' example.yaml
+          cmd: yq '.dnsRecordName = "YQ updated me"' 'example.yaml'
 
-    - name: read from file
+    - name: read from updated file
       uses: mikefarah/yq@v4.44.1
       with:
-            cmd: yq '.dnsRecordName' example.yaml
+          cmd: yq '.dnsRecordName' 'example.yaml'
 
     - name: Workspace
       run: ls ${{ github.workspace }}
