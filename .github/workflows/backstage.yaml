@@ -57,22 +57,29 @@ jobs:
         echo "Environment: ${{ github.event.inputs.environments }}"
         echo "Platform: ${{ github.event.inputs.cft_sds }}"
 
-    - name: Create example.yaml
+    - name: Create sample.yaml
       run: |
         touch example.yaml
-        echo "dnsZoneName: ${{ github.event.inputs.dns_zone }}
-        dnsRecordName: ${{ github.event.inputs.record_name }}
-        dnsRecordValue: ${{ github.event.inputs.record_value }}
-        dnsRecordTTL: ${{ github.event.inputs.record_ttl }}
-        environment: ${{ github.event.inputs.environments }}
-        platform: ${{ github.event.inputs.cft_sds }}" > example.yaml
+        echo "--- 
+        A:
+          - name: \"ctscmail\"
+            ttl: 3600
+            record:
+              -  \"51.140.180.140 \"
+        
+        cname:
+          - name:  \"_1fc88e03b87b33fb04a3b1c5978e80b8 \"
+            ttl: 900
+            record:  \"3FED4C626334D6135F1258241ADBBF36.F6728027F74DAF3E336958B894F24534.ma5er55rQa0HPM55O5Fq.comodoca.com \"
+          - name:  \"reformscan \"
+            ttl: 60
+            record:  \"hmcts-sbox-gufqadefbjgbhkhv.z01.azurefd.net\" " > example.yaml
 
-              
     - name: read from file
       id: readOriginalFile
       uses: mikefarah/yq@v4.44.1
       with:
-          cmd: yq '.dnsRecordName' 'example.yaml'
+          cmd: yq '.A' 'example.yaml'
 
     - name: show yq result
       run: echo Result is ${{ steps.readOriginalFile.outputs.result }}
@@ -80,13 +87,13 @@ jobs:
     - name: update file
       uses: mikefarah/yq@v4.44.1
       with:
-          cmd: yq -i '.dnsRecordName = "YQ updated me"' 'example.yaml'
+        cmd: yq -i '.A += {"name": "${{ github.event.inputs.record_name }}", "ttl": "${{ github.event.inputs.record_ttl }}", "record": ["${{ github.event.inputs.record_value }}"]}' 'example.yaml'
 
     - name: read from updated file
       id: readUpdatedFile
       uses: mikefarah/yq@v4.44.1
       with:
-          cmd: yq '.dnsRecordName' 'example.yaml'
+          cmd: yq '.A' 'example.yaml'
 
     - name: show yq result
       run: echo Result is ${{ steps.readUpdatedFile.outputs.result }}
