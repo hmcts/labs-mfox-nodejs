@@ -80,7 +80,7 @@ jobs:
     - name: update file
       uses: mikefarah/yq@v4.44.1
       with:
-          cmd: yq '.dnsRecordName = "YQ updated me"' 'example.yaml'
+          cmd: yq -e '.dnsRecordName = "YQ updated me"' 'example.yaml'
 
     - name: read from updated file
       id: readUpdatedFile
