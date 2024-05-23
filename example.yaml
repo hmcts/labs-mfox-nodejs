@@ -1,0 +1,6 @@
+dnsZoneName: hmcts.net
+dnsRecordName: YQ updated me
+dnsRecordValue: value
+dnsRecordTTL: 123
+environment: missing
+platform: sds
