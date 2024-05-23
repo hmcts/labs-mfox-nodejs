@@ -15,6 +15,9 @@ on:
       record_ttl:
         type: string
         description: ""
+      record_type:
+        type: string
+        description: ""
       environments:
         type: string
         description: ""
@@ -32,15 +35,12 @@ jobs:
     - uses: actions/checkout@v4
     # - id: set-matrix-environments
     #   run: |
-    #     environments="${{ github.event.inputs.environments }}"
+    #     environments="${{ inputs.environments }}"
     #     echo "matrix-environments=[\"${environments//', '/\",\"}\"]" >> $GITHUB_OUTPUT
     
     - name: Set Branch Name
-      run: echo "BACKSTAGE_BRANCH_NAME=${{ github.event.inputs.dns_zone }}_${{ github.event.inputs.record_name }}_${{ github.event.inputs.record_value }}_${{ github.event.inputs.cft_sds }}" >> $GITHUB_ENV
+      run: echo "BACKSTAGE_BRANCH_NAME=${{ inputs.dns_zone }}_${{ inputs.record_name }}_${{ inputs.record_value }}_${{ inputs.cft_sds }}" >> $GITHUB_ENV
     
-    - name: Print Branch Name
-      run: echo $BACKSTAGE_BRANCH_NAME
-
     - name: git create branch
       run: |
         git --version
@@ -50,12 +50,12 @@ jobs:
 
     - name: Print Inputs
       run: |
-        echo "DNS Zone Name: ${{ github.event.inputs.dns_zone }}"
-        echo "DNS Record Name: ${{ github.event.inputs.record_name }}"
-        echo "DNS Record Value: ${{ github.event.inputs.record_value }}"
-        echo "DNS Record TTL: ${{ github.event.inputs.record_ttl }}"
-        echo "Environment: ${{ github.event.inputs.environments }}"
-        echo "Platform: ${{ github.event.inputs.cft_sds }}"
+        echo "DNS Zone Name: ${{ inputs.dns_zone }}"
+        echo "DNS Record Name: ${{ inputs.record_name }}"
+        echo "DNS Record Value: ${{ inputs.record_value }}"
+        echo "DNS Record TTL: ${{ inputs.record_ttl }}"
+        echo "Environment: ${{ inputs.environments }}"
+        echo "Platform: ${{ inputs.cft_sds }}"
 
     - name: Create sample.yaml
       run: |
@@ -75,28 +75,25 @@ jobs:
             ttl: 60
             record:  \"hmcts-sbox-gufqadefbjgbhkhv.z01.azurefd.net\" " > example.yaml
 
-    - name: read from file
-      id: readOriginalFile
-      uses: mikefarah/yq@v4.44.1
+    - name: Add new A Record
+      if: inputs.record_type == "A"
+      uses: "./.github/actions/aRecord.yaml"
       with:
-          cmd: yq '.A' 'example.yaml'
-
-    - name: show yq result
-      run: echo Result is "${{ steps.readOriginalFile.outputs.result }}"
-
-    - name: update file
-      uses: mikefarah/yq@v4.44.1
+        zone_name: ${{ inputs.dns_zone }}
+        record_name: ${{ inputs.record_name }}
+        record_value: ${{ inputs.record_value }}
+        record_ttl: ${{ inputs.record_ttl }}
+        environment: ${{ inputs.environments }}
+        
+    - name: Add new CNAME Record
+      if: inputs.record_type == "CNAME"
+      uses: "./.github/actions/cnameRecord.yaml"
       with:
-        cmd: yq -i '.A += {"name":"${{ github.event.inputs.record_name }}", "ttl":"${{ github.event.inputs.record_ttl }}", "record":["${{ github.event.inputs.record_value }}"]}' example.yaml
-
-    - name: read from updated file
-      id: readUpdatedFile
-      uses: mikefarah/yq@v4.44.1
-      with:
-          cmd: yq '.A' 'example.yaml'
-
-    - name: show yq result
-      run: echo Result is "${{ steps.readUpdatedFile.outputs.result }}"
+        zone_name: ${{ inputs.dns_zone }}
+        record_name: ${{ inputs.record_name }}
+        record_value: ${{ inputs.record_value }}
+        record_ttl: ${{ inputs.record_ttl }}
+        environment: ${{ inputs.environments }}
 
     - name: Workspace
       run: ls ${{ github.workspace }}
@@ -108,6 +105,6 @@ jobs:
         git push -u origin $BACKSTAGE_BRANCH_NAME
 
     - name: create pull request
-      run: gh pr create -B master -H $BACKSTAGE_BRANCH_NAME --title 'Create new ${{ github.event.inputs.record_name }} record in ${{ github.event.inputs.dns_zone }}' --body 'Created by Backstage'
+      run: gh pr create -B master -H $BACKSTAGE_BRANCH_NAME --title 'Create new ${{ inputs.record_name }} record in ${{ inputs.dns_zone }}' --body 'Created by Backstage'
       env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

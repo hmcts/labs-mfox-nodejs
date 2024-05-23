@@ -1,0 +1,46 @@
+name: Add an A Record Type - Template
+
+on:
+  workflow_call:
+    inputs:
+      zone_name:
+        required: true
+        type: string
+      record_name:
+        required: true
+        type: string
+      record_value:
+        required: true
+        type: string
+      record_ttl:
+        required: true
+        type: string
+      environment:
+        required: true
+        type: string
+
+Runs:
+  using: "composite"
+  steps:
+    - name: read from file
+      id: readOriginalFile
+      uses: mikefarah/yq@v4.44.1
+      with:
+          cmd: yq '.A' 'example.yaml'
+
+    - name: show yq result
+      run: echo Result is "${{ steps.readOriginalFile.outputs.result }}"
+
+    - name: update file
+      uses: mikefarah/yq@v4.44.1
+      with:
+        cmd: yq -i '.A += {"name":"${{ github.event.inputs.record_name }}", "ttl":"${{ github.event.inputs.record_ttl }}", "record":["${{ github.event.inputs.record_value }}"]}' example.yaml
+
+    - name: read from updated file
+      id: readUpdatedFile
+      uses: mikefarah/yq@v4.44.1
+      with:
+          cmd: yq '.A' 'example.yaml'
+
+    - name: show yq result
+      run: echo Result is "${{ steps.readUpdatedFile.outputs.result }}"
