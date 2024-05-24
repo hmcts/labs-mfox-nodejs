@@ -67,7 +67,7 @@ jobs:
         record_name: ${{ inputs.record_name }}
         record_value: ${{ inputs.record_value }}
         record_ttl: ${{ inputs.record_ttl }}
-        dns_file: environments/${{ inputs.environment}}/$DNS_ZONE_FILE_NAME
+        dns_file: environments/${{ inputs.environments }}/$DNS_ZONE_FILE_NAME
 
         
     - name: Add new CNAME Record
@@ -77,7 +77,7 @@ jobs:
         record_name: ${{ inputs.record_name }}
         record_value: ${{ inputs.record_value }}
         record_ttl: ${{ inputs.record_ttl }}
-        dns_file: environments/${{ inputs.environment}}/$DNS_ZONE_FILE_NAME
+        dns_file: environments/${{ inputs.environments }}/$DNS_ZONE_FILE_NAME
 
     - name: Workspace
       run: ls ${{ github.workspace }}
