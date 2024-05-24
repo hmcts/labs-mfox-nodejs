@@ -41,7 +41,7 @@ jobs:
     - name: Set Branch Name
       run: |
         echo "BACKSTAGE_BRANCH_NAME=${{ inputs.dns_zone }}_${{ inputs.record_name }}_${{ inputs.record_value }}_${{ inputs.cft_sds }}" >> $GITHUB_ENV
-        echo "DNS_ZONE_FILE_NAME="${{{inputs.dns_zone}}//./_}.yaml" >> $GITHUB_ENV
+        echo "DNS_ZONE_FILE_NAME="${${{inputs.dns_zone}}//./_}.yaml" >> $GITHUB_ENV
 
     - name: git create branch
       run: |
