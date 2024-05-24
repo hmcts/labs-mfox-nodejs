@@ -1,23 +1,21 @@
-name: Add an A Record Type - Template
-
-on:
-  workflow_call:
-    inputs:
-      zone_name:
-        required: true
-        type: string
-      record_name:
-        required: true
-        type: string
-      record_value:
-        required: true
-        type: string
-      record_ttl:
-        required: true
-        type: string
-      environment:
-        required: true
-        type: string
+name: 'Create an A Record'
+description: 'This action will create an A record in the found yaml file'
+inputs:
+  environment:
+    required: true
+    description: 'Environment to search for the DNS Zone'
+  zone_name: 
+    required: true
+    description: 'DNS Zone name to search for'
+  record_name:
+    required: true
+    description: 'Record name for new entry'
+  record_value:
+    required: true
+    description: 'Record value for new entry'
+  record_ttl:
+    required: true
+    description: 'Record time to live for new entry'
 
 runs:
   using: "composite"
