@@ -21,7 +21,7 @@ on:
       environments:
         type: string
         description: ""
-        default: "missing"
+        default: "prod"
       cft_sds:
         type: string
         description: ""
@@ -39,15 +39,17 @@ jobs:
     #     echo "matrix-environments=[\"${environments//', '/\",\"}\"]" >> $GITHUB_OUTPUT
     
     - name: Set Branch Name
-      run: echo "BACKSTAGE_BRANCH_NAME=${{ inputs.dns_zone }}_${{ inputs.record_name }}_${{ inputs.record_value }}_${{ inputs.cft_sds }}" >> $GITHUB_ENV
-    
+      run: |
+        echo "BACKSTAGE_BRANCH_NAME=${{ inputs.dns_zone }}_${{ inputs.record_name }}_${{ inputs.record_value }}_${{ inputs.cft_sds }}" >> $GITHUB_ENV
+        echo "DNS_ZONE_FILE_NAME="${{{inputs.dns_zone}}//./_}.yaml" >> $GITHUB_ENV
+
     - name: git create branch
       run: |
         git --version
         git config user.name "GitHub Actions Bot"
         git config user.email "<>"
         git checkout -b $BACKSTAGE_BRANCH_NAME
-
+      
     - name: Print Inputs
       run: |
         echo "DNS Zone Name: ${{ inputs.dns_zone }}"
@@ -57,43 +59,24 @@ jobs:
         echo "Environment: ${{ inputs.environments }}"
         echo "Platform: ${{ inputs.cft_sds }}"
 
-    - name: Create sample.yaml
-      run: |
-        touch example.yaml
-        echo "--- 
-        A:
-          - name: \"ctscmail\"
-            ttl: 3600
-            record:
-              -  \"51.140.180.140 \"
-        
-        cname:
-          - name:  \"_1fc88e03b87b33fb04a3b1c5978e80b8 \"
-            ttl: 900
-            record:  \"3FED4C626334D6135F1258241ADBBF36.F6728027F74DAF3E336958B894F24534.ma5er55rQa0HPM55O5Fq.comodoca.com \"
-          - name:  \"reformscan \"
-            ttl: 60
-            record:  \"hmcts-sbox-gufqadefbjgbhkhv.z01.azurefd.net\" " > example.yaml
-
     - name: Add new A Record
       if: ${{ inputs.record_type == 'A' }}
       uses: "./.github/actions/aRecord"
       with:
-        zone_name: ${{ inputs.dns_zone }}
         record_name: ${{ inputs.record_name }}
         record_value: ${{ inputs.record_value }}
         record_ttl: ${{ inputs.record_ttl }}
-        environment: ${{ inputs.environments }}
+        dns_file: environments/${{ inputs.environment}}/$DNS_ZONE_FILE_NAME
+
         
     - name: Add new CNAME Record
       if: ${{ inputs.record_type == 'CNAME' }}
       uses: "./.github/actions/cnameRecord"
       with:
-        zone_name: ${{ inputs.dns_zone }}
         record_name: ${{ inputs.record_name }}
         record_value: ${{ inputs.record_value }}
         record_ttl: ${{ inputs.record_ttl }}
-        environment: ${{ inputs.environments }}
+        dns_file: environments/${{ inputs.environment}}/$DNS_ZONE_FILE_NAME
 
     - name: Workspace
       run: ls ${{ github.workspace }}

@@ -1,12 +1,9 @@
 name: 'Create CNAME Record'
 description: 'This action will create a CNAME record in the found yaml file'
 inputs:
-  environment:
+  dns_file:
     required: true
     description: 'Environment to search for the DNS Zone'
-  zone_name: 
-    required: true
-    description: 'DNS Zone name to search for'
   record_name:
     required: true
     description: 'Record name for new entry'
@@ -24,7 +21,7 @@ runs:
       id: readOriginalFile
       uses: mikefarah/yq@v4.44.1
       with:
-          cmd: yq '.cname' 'example.yaml'
+          cmd: yq '.cname' ${{ inputs.dns_file }}
 
     - name: show yq result
       shell: bash
@@ -33,13 +30,13 @@ runs:
     - name: update file
       uses: mikefarah/yq@v4.44.1
       with:
-        cmd: yq -i '.cname += {"name":"${{ github.event.inputs.record_name }}", "ttl":${{ github.event.inputs.record_ttl }}, "record":"${{ github.event.inputs.record_value }}"} | .cname[].name style="double" | .cname[].record style="double"' example.yaml
+        cmd: yq -i '.cname += {"name":"${{ github.event.inputs.record_name }}", "ttl":${{ github.event.inputs.record_ttl }}, "record":"${{ github.event.inputs.record_value }}"} | .cname[].name style="double" | .cname[].record style="double"' ${{ inputs.dns_file }}
 
     - name: read from updated file
       id: readUpdatedFile
       uses: mikefarah/yq@v4.44.1
       with:
-          cmd: yq '.cname' 'example.yaml'
+          cmd: yq '.cname' ${{ inputs.dns_file }}
 
     - name: show yq result
       shell: bash
