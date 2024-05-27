@@ -18,6 +18,14 @@ on:
       record_type:
         type: string
         description: ""
+      shutter_resource_id:
+        type: string
+        description: ""
+        default: ""
+      alias_target_id:
+        type: string
+        description: ""
+        default: ""
       environments:
         type: string
         description: ""
@@ -57,26 +65,40 @@ jobs:
         echo "DNS Record Name: ${{ inputs.record_name }}"
         echo "DNS Record Value: ${{ inputs.record_value }}"
         echo "DNS Record TTL: ${{ inputs.record_ttl }}"
+        echo "DNS Record Type: ${{ inputs.record_type }}"
+        echo "DNS A Record shutter Id: ${{ inputs.shutter_resource_id }}"
+        echo "DNS A Records Alias Target Id: ${{ inputs.alias_target_id }}"
         echo "Environment: ${{ inputs.environments }}"
         echo "Platform: ${{ inputs.cft_sds }}"
 
-    - name: Add new A Record
-      if: ${{ inputs.record_type == 'A' }}
-      uses: "./.github/actions/aRecord"
-      with:
-        record_name: ${{ inputs.record_name }}
-        record_value: ${{ inputs.record_value }}
-        record_ttl: ${{ inputs.record_ttl }}
-        dns_file: environments/${{ inputs.environments }}/$DNS_ZONE_FILE_NAME
+    # - name: Add new A Record
+    #   if: ${{ inputs.record_type == 'A' }}
+    #   uses: "./.github/actions/aRecord"
+    #   with:
+    #     record_name: ${{ inputs.record_name }}
+    #     record_value: ${{ inputs.record_value }}
+    #     record_ttl: ${{ inputs.record_ttl }}
+    #     dns_file: environments/${{ inputs.environments }}/$DNS_ZONE_FILE_NAME
 
         
-    - name: Add new CNAME Record
-      if: ${{ inputs.record_type == 'CNAME' }}
-      uses: "./.github/actions/cnameRecord"
+    # - name: Add new CNAME Record
+    #   if: ${{ inputs.record_type == 'CNAME' }}
+    #   uses: "./.github/actions/cnameRecord"
+    #   with:
+    #     record_name: ${{ inputs.record_name }}
+    #     record_value: ${{ inputs.record_value }}
+    #     record_ttl: ${{ inputs.record_ttl }}
+    #     dns_file: environments/${{ inputs.environments }}/$DNS_ZONE_FILE_NAME
+
+    - name: Add new DNS Record
+      uses: "./.github/actions/multiRecord"
       with:
         record_name: ${{ inputs.record_name }}
         record_value: ${{ inputs.record_value }}
         record_ttl: ${{ inputs.record_ttl }}
+        record_type: ${{ inputs.record_type }}
+        shutter_resource_id: ${{ inputs.shutter_resource_id }}
+        alias_target_id: ${{ inputs.alias_target_id }}
         dns_file: environments/${{ inputs.environments }}/$DNS_ZONE_FILE_NAME
 
     - name: Workspace
