@@ -9,15 +9,16 @@ on:
       record_name:
         type: string
         description: ""
-      record_value:
-        type: string
-        description: ""
       record_ttl:
         type: number
         description: ""
       record_type:
         type: string
         description: ""
+      record_value:
+        type: string
+        description: ""
+        default: ""
       shutter_resource_id:
         type: string
         description: ""
@@ -63,11 +64,11 @@ jobs:
       run: |
         echo "DNS Zone Name: ${{ inputs.dns_zone }}"
         echo "DNS Record Name: ${{ inputs.record_name }}"
-        echo "DNS Record Value: ${{ inputs.record_value }}"
         echo "DNS Record TTL: ${{ inputs.record_ttl }}"
         echo "DNS Record Type: ${{ inputs.record_type }}"
-        echo "DNS A Record shutter Id: ${{ inputs.shutter_resource_id }}"
-        echo "DNS A Records Alias Target Id: ${{ inputs.alias_target_id }}"
+        echo "DNS Record Value: ${{ inputs.record_value }}"
+        echo "DNS Record shutter Id (A record only): ${{ inputs.shutter_resource_id }}"
+        echo "DNS Records Alias Target Id (A record only): ${{ inputs.alias_target_id }}"
         echo "Environment: ${{ inputs.environments }}"
         echo "Platform: ${{ inputs.cft_sds }}"
 
@@ -94,9 +95,9 @@ jobs:
       uses: "./.github/actions/multiRecord"
       with:
         record_name: ${{ inputs.record_name }}
-        record_value: ${{ inputs.record_value }}
         record_ttl: ${{ inputs.record_ttl }}
         record_type: ${{ inputs.record_type }}
+        record_value: ${{ inputs.record_value }}
         shutter_resource_id: ${{ inputs.shutter_resource_id }}
         alias_target_id: ${{ inputs.alias_target_id }}
         dns_file: environments/${{ inputs.environments }}/$DNS_ZONE_FILE_NAME
