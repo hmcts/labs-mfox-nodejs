@@ -102,6 +102,13 @@ jobs:
         alias_target_id: ${{ inputs.alias_target_id }}
         dns_file: environments/${{ inputs.environments }}/$DNS_ZONE_FILE_NAME
 
+    - name: Add new Shutter config
+      uses: "./.github/actions/shutterRecord"
+      with:
+        record_name: ${{ inputs.record_name }}
+        record_type: ${{ inputs.record_type }}
+        shutter_file: shuttering/${{ inputs.environments }}/$DNS_ZONE_FILE_NAME
+
     - name: Workspace
       run: ls ${{ github.workspace }}
 
