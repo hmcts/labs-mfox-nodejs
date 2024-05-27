@@ -1,11 +1,13 @@
 ns: []
-
 mx: []
-
-A: []
-
+A:
+  - name: "MyTestRecord"
+    ttl: "235"
+    alias_target_resource_id: "alias_Id"
+    shutter_resource_id: "shutter_Id"
+    record:
+      - ""
 txt: []
-
 cname:
   - name: "_A3AC75C13814E5B2EF9F4BDEDDB85F97.data-analytics"
     ttl: 10800
