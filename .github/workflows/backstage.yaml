@@ -17,15 +17,15 @@ on:
         description: ""
       record_value:
         type: string
-        description: ""
+        description: ''
         default: ""
       shutter_resource_id:
         type: string
-        description: ""
+        description: ''
         default: ""
       alias_target_id:
         type: string
-        description: ""
+        description: ''
         default: ""
       environments:
         type: string
