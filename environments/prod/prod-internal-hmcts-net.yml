@@ -1,11 +1,14 @@
 ns: []
-
 mx: []
-
-A: []
-
+A:
+  - name: backstageTest
+    ttl: 1231
+    alias_target_resource_id: ""
+    shutter_resource_id: ""
+    record:
+      - ""
+    style: double
 txt: []
-
 cname:
   - name: "_A3AC75C13814E5B2EF9F4BDEDDB85F97.data-analytics"
     ttl: 10800
